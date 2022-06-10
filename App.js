@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { SafeAreaView, View, FlatList, StyleSheet, Text, StatusBar, Alert, Image, Modal, ActivityIndicator, Pressable, RefreshControl } from 'react-native';
+import { SafeAreaView, View, VirtualizedList, StyleSheet, Text, StatusBar, Alert, Image, Modal, ActivityIndicator, Pressable, RefreshControl } from 'react-native';
 
 const Item = ({ title, deskripsi, href, visib: [modalVisible, setModalVisible] = useState(false) }) => (
   <View style={styles.item}>
@@ -81,8 +81,12 @@ const App = () => {
       <Text style={styles.caption}>Jl. Mayor Salim Batubara 87 Kupang Teba, Teluk Betung Utara, Bandar Lampung 35212   •   Phone: (0721) 488-311 / 482-590</Text>
       <Text style={styles.caption}>WhatsApp / SMS: 0811-793-123   •   Line: @sentracomputer</Text>
       {isLoading ? <ActivityIndicator/> : (
-      <FlatList
+      <VirtualizedList
         data={dataAPI}
+        initialNumToRender={4}
+        getItem={(data, index) => data[index]}
+        getItemCount={data => data.length}
+        keyExtractor={(item) => item.id}
         renderItem={renderItem}
         refreshControl={
           <RefreshControl
