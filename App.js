@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { SafeAreaView, View, FlatList, StyleSheet, Text, StatusBar, Alert, Image, Modal, ActivityIndicator, Pressable } from 'react-native';
+import { SafeAreaView, View, FlatList, StyleSheet, Text, StatusBar, Alert, Image, Modal, ActivityIndicator, Pressable, RefreshControl } from 'react-native';
 
 const sentraComputer = [
   {"deskripsi":"AMD 3020e, 4GB DDR4, 256GB SSD, VGA AMD Radeon Graphics, 14\" WXGA (1366x768), Wi-Fi, Bluetooth, Webcam, Windows 11 + Office Home & Student 2021","href":"https://sentracomputer.com/img/products/4840.jpg","title":"Acer Aspire 3 A314-22-A1M5 Charcoal Black"},{"deskripsi":"Intel Celeron N5100, 4GB DDR4, 256GB SSD M.2 PCIe NVMe, VGA Intel UHD Graphics, 14\" WXGA (1366x768), Wi-Fi, Bluetooth, LAN, Webcam, 1.9kg, Windows 10 + Office Home & Student 2019","href":"https://sentracomputer.com/img/products/4524.jpg","title":"Acer Aspire 3 Slim A314-35-C8QL Pure Silver"},{"deskripsi":"AMD 3020e, 4GB DDR4, 256GB SSD, VGA AMD Radeon Graphics, 14\" Full HD (1920x1080), Wi-Fi, Bluetooth, Webcam, Windows 11 + Office Home & Student 2021","href":"https://sentracomputer.com/img/products/4839.jpg","title":"Acer Aspire 3 A314-22-A667 Charcoal Black"},{"deskripsi":"AMD Athlon Silver 3050U, 4GB DDR4, 256GB SSD M.2 PCIe NVMe, VGA AMD Radeon Graphics, 14\" WXGA (1366x768), Wi-Fi, Bluetooth, LAN, Webcam, 1.9kg, Windows 11 + Office Home & Student 2021","href":"https://sentracomputer.com/img/products/4845.jpg","title":"Acer Aspire 3 A314-22-R0BT Charcoal Black"},{"deskripsi":"AMD Athlon Silver 3050U, 4GB DDR4, 256GB SSD, VGA AMD Radeon Graphics, 14\" Full HD (1920x1080), Wi-Fi, Bluetooth, Webcam, Windows 11 + Office Home & Student 2019","href":"https://sentracomputer.com/img/products/5163.jpg","title":"Acer Aspire 3 A314-22-R430 Charcoal Black"},{"deskripsi":"AMD Ryzen 3 3250U, 4GB DDR4, 256GB SSD M.2 PCIe NVMe, VGA AMD Radeon Graphics, 14\" WXGA (1366x768), Wi-Fi, Bluetooth, LAN, Webcam, 1.9kg, Windows 11 + Office Home & Student 2021","href":"https://sentracomputer.com/img/products/5683.jpg","title":"Acer Aspire 3 A314-22-R10Y Pure Silver"},{"deskripsi":"AMD Ryzen 3 3250, 4GB DDR4, 256GB SSD M.2 PCIe NVMe, VGA AMD Radeon Graphics, 14\" Full HD (1920x1080) IPS, Wi-Fi, Bluetooth, LAN, Webcam, 1.9kg, Windows 11 + Office Home & Student 2021","href":"https://sentracomputer.com/img/products/4871.jpg","title":"Acer Aspire 3 A314-22-R890 Charcoal Black"}
@@ -45,6 +45,7 @@ const Item = ({ title, deskripsi, href, visib: [modalVisible, setModalVisible] =
 const App = () => {
   const [isLoading, setLoading] = useState(true);
   const [dataAPI, setDataAPI] = useState([]);
+  const [onRefresh, setOnRefresh] = useState(false);
 
   const getSentraComputer = async () => {
      try {
@@ -68,7 +69,11 @@ const App = () => {
 
   let year = new Date().getFullYear();
 
-  const [modalVisible, setModalVisible] = useState(false);
+  const Call_RefreshControl = () => {
+    setOnRefresh(true);
+    setDataAPI('');
+    getSentraComputer().then(() => setOnRefresh(false));
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -83,6 +88,12 @@ const App = () => {
       <FlatList
         data={dataAPI}
         renderItem={renderItem}
+        refreshControl={
+          <RefreshControl
+            refreshing={onRefresh}
+            onRefresh={Call_RefreshControl}
+          />
+        }
       />
       )}
     </SafeAreaView>
