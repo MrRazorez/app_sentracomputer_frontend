@@ -1,15 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { SafeAreaView, View, VirtualizedList, StyleSheet, Text, StatusBar, Alert, Image, Modal, ActivityIndicator, Pressable, RefreshControl } from 'react-native';
+import { SafeAreaView, View, VirtualizedList, StyleSheet, Text, StatusBar, Image, Modal, ActivityIndicator, Pressable, RefreshControl } from 'react-native';
 
 const Item = ({ title, deskripsi, href, price, visib: [modalVisible, setModalVisible] = useState(false) }) => (
   <View style={styles.item}>
-    <View style={styles.listBox}>
-      <Image
-          style={styles.logo}
-          source={{uri: href}}
-        />
-    </View>
-    <View style={styles.listBox}>
+    <Image
+        style={styles.logo}
+        source={{uri: href}}
+    />
+    <View>
       <Text style={styles.title}>{title}</Text>
       <Modal
         animationType="fade"
@@ -113,25 +111,22 @@ const styles = StyleSheet.create({
     flex: 1,
     marginTop: StatusBar.currentHeight || 0
   },
-  listBox: {
-    padding: 20
-  },
   item: {
     backgroundColor: '#295ebb',
     borderTopRightRadius: 20,
     borderBottomRightRadius: 20,
     borderTopLeftRadius: 20,
     borderBottomLeftRadius: 20,
-    paddingHorizontal: 50,
+    padding: 20,
     marginVertical: 30,
     marginHorizontal: 40,
     flex: 1,
-    flexDirection: 'row',
+    flexDirection: 'column',
     justifyContent: 'center',
   },
   title: {
     padding: 10,
-    fontSize: 12,
+    fontSize: 20,
     color: 'white',
     textAlign: 'center'
   },
@@ -151,9 +146,9 @@ const styles = StyleSheet.create({
     padding: 20
   },
   logo: {
-    width: 120,
-    height: 120,
-    resizeMode: 'center'
+    width: 295,
+    height: 295,
+    resizeMode: 'stretch',
   },
   centeredView: {
     flex: 1,
@@ -179,7 +174,8 @@ const styles = StyleSheet.create({
   },
   button: {
     borderRadius: 20,
-    padding: 10,
+    padding: 2,
+    marginHorizontal: 100,
     elevation: 2
   },
   buttonOpen: {
