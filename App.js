@@ -1,40 +1,44 @@
 import React, { useEffect, useState } from 'react';
 import { SafeAreaView, View, VirtualizedList, StyleSheet, Text, StatusBar, Alert, Image, Modal, ActivityIndicator, Pressable, RefreshControl } from 'react-native';
 
-const Item = ({ title, deskripsi, href, visib: [modalVisible, setModalVisible] = useState(false) }) => (
+const Item = ({ title, deskripsi, href, price, visib: [modalVisible, setModalVisible] = useState(false) }) => (
   <View style={styles.item}>
-    <Image
-        style={styles.logo}
-        source={{uri: href}}
-      />
-    <Text style={styles.title}>{title}</Text>
-    <Modal
-      animationType="slide"
-      transparent={true}
-      visible={modalVisible}
-      onRequestClose={() => {
-        Alert.alert("Modal has been closed.");
-        setModalVisible(!modalVisible);
-      }}
-    >
-    <View style={styles.centeredView}>
-      <View style={styles.modalView}>
-        <Text style={styles.modalText}>{deskripsi}</Text>
-          <Pressable
-            style={[styles.button, styles.buttonClose]}
-            onPress={() => setModalVisible(!modalVisible)}
-          >
-            <Text style={styles.textStyle}>Close</Text>
-          </Pressable>
+    <View style={styles.listBox}>
+      <Image
+          style={styles.logo}
+          source={{uri: href}}
+        />
+    </View>
+    <View style={styles.listBox}>
+      <Text style={styles.title}>{title}</Text>
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          setModalVisible(!modalVisible);
+        }}
+      >
+      <View style={styles.centeredView}>
+        <View style={styles.modalView}>
+          <Text style={styles.modalText}>{deskripsi}</Text>
+          <Text style={styles.modalTextTwo}>{price}</Text>
+            <Pressable
+              style={[styles.button, styles.buttonClose]}
+              onPress={() => setModalVisible(!modalVisible)}
+            >
+              <Text style={styles.textStyle}>Tutup</Text>
+            </Pressable>
+          </View>
         </View>
-      </View>
-    </Modal>
-    <Pressable
-      style={[styles.button, styles.buttonOpen]}
-      onPress={() => setModalVisible(true)}
-    >
-      <Text style={styles.textStyle}>Deskripsi</Text>
-    </Pressable>
+      </Modal>
+      <Pressable
+        style={[styles.button, styles.buttonOpen]}
+        onPress={() => setModalVisible(true)}
+      >
+        <Text style={styles.textStyle}>Deskripsi</Text>
+      </Pressable>
+    </View>
   </View>
 );
 
@@ -60,7 +64,7 @@ const App = () => {
   }, []);
 
   const renderItem = ({ item }) => (
-    <Item title={item.title} deskripsi={item.deskripsi} href={item.href} />
+    <Item title={item.title} deskripsi={item.deskripsi} href={item.href} price={item.price} />
   );
 
   let year = new Date().getFullYear();
@@ -73,13 +77,16 @@ const App = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Image
-        style={styles.header}
-        source={require('./assets/sentralogo.png')}
-      />
-      <Text style={styles.caption}>Copyright © 2004-{year} Sentra Computer   •   email: info@sentracomputer.com</Text>
-      <Text style={styles.caption}>Jl. Mayor Salim Batubara 87 Kupang Teba, Teluk Betung Utara, Bandar Lampung 35212   •   Phone: (0721) 488-311 / 482-590</Text>
-      <Text style={styles.caption}>WhatsApp / SMS: 0811-793-123   •   Line: @sentracomputer</Text>
+      <View style={styles.header}>
+        <Image
+          source={require('./assets/sentralogo.png')}
+        />
+        <View style={styles.contactPerson}>
+          <Text style={styles.caption}>Copyright © 2004-{year} Sentra Computer   •   email: info@sentracomputer.com</Text>
+          <Text style={styles.caption}>Jl. Mayor Salim Batubara 87 Kupang Teba, Teluk Betung Utara, Bandar Lampung 35212   •   Phone: (0721) 488-311 / 482-590</Text>
+          <Text style={styles.caption}>WhatsApp / SMS: 0811-793-123   •   Line: @sentracomputer</Text>
+        </View>
+      </View>
       {isLoading ? <ActivityIndicator/> : (
       <VirtualizedList
         data={dataAPI}
@@ -106,37 +113,51 @@ const styles = StyleSheet.create({
     flex: 1,
     marginTop: StatusBar.currentHeight || 0
   },
+  listBox: {
+    padding: 20
+  },
   item: {
     backgroundColor: '#295ebb',
     borderTopRightRadius: 20,
     borderBottomRightRadius: 20,
     borderTopLeftRadius: 20,
     borderBottomLeftRadius: 20,
-    padding: 20,
-    marginVertical: 8,
-    marginHorizontal: 16
+    paddingHorizontal: 50,
+    marginVertical: 30,
+    marginHorizontal: 40,
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'center',
   },
   title: {
-    fontSize: 18,
+    padding: 10,
+    fontSize: 12,
     color: 'white',
     textAlign: 'center'
   },
   caption: {
     fontSize: 8,
-    color: '#295ebb',
+    color: 'white',
     textAlign: 'center'
   },
   header: {
+    backgroundColor: 'darkblue',
+    padding: 10,
+    flexDirection: 'column',
     resizeMode: 'center',
     alignItems: 'center'
   },
+  contactPerson: {
+    padding: 20
+  },
   logo: {
-    width: 340,
-    height: 300,
+    width: 120,
+    height: 120,
     resizeMode: 'center'
   },
   centeredView: {
     flex: 1,
+    padding: 10,
     justifyContent: "center",
     alignItems: "center",
     marginTop: 22
@@ -174,6 +195,12 @@ const styles = StyleSheet.create({
   },
   modalText: {
     marginBottom: 15,
+    textAlign: "center"
+  },
+  modalTextTwo: {
+    marginBottom: 15,
+    fontWeight: "bold",
+    fontSize: 30,
     textAlign: "center"
   }
 });
